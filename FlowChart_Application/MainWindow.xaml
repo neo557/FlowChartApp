@@ -1,0 +1,151 @@
+﻿<Window x:Class="FlowChart.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="FlowChart" Height="600" Width="900"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="110"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="320"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- 上部 -->
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal" Background="#EEE" VerticalAlignment="Center" Margin="6">
+            <TextBlock Text="企画：" VerticalAlignment="Center" Margin="6"/>
+            <ComboBox x:Name="ProjectSelector" Width="420" SelectionChanged="ProjectSelector_SelectionChanged" Margin="4"/>
+            <Button Content="削除" Margin="6" Click="DeleteProjectButton_Click"/>
+            <Button Content="保存" Margin="6" Click="SaveButton_Click"/>
+            <Button Content="読み込み" Margin="6" Click="LoadButton_Click"/>
+        </StackPanel>
+
+        <!-- 左：ブロックツール -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Background="#F0F0F0" Margin="8">
+            <TextBlock Text="ブロックツール" FontWeight="Bold" FontSize="16" Margin="4"/>
+            <Canvas Width="160" Height="70" Background="White" Tag="Rectangle" MouseMove="BlockTemplate_MouseMove" Margin="4">
+                <Rectangle Width="140" Height="50" Fill="White" Stroke="Black"/>
+                <TextBlock Text="四角" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="45" Canvas.Top="18"/>
+            </Canvas>
+
+            <Canvas Width="160" Height="70" Background="White" Tag="Diamond" MouseMove="BlockTemplate_MouseMove" Margin="4">
+                <Polygon Points="70,0 140,35 70,70 0,35" Fill="White" Stroke="Black"/>
+                <TextBlock Text="ひし形" Canvas.Left="55" Canvas.Top="20"/>
+            </Canvas>
+
+            <Canvas Width="160" Height="70" Background="White" Tag="Ellipse" MouseMove="BlockTemplate_MouseMove" Margin="4">
+                <Ellipse Width="140" Height="50" Fill="LightGreen" Stroke="Green"/>
+                <TextBlock Text="楕円" Canvas.Left="60" Canvas.Top="20"/>
+            </Canvas>
+
+            <Canvas Width="160" Height="80" Background="White" Tag="UpTriangle" MouseMove="BlockTemplate_MouseMove" Margin="4">
+                <Polygon Points="70,0 140,70 0,70" Fill="LightBlue" Stroke="DarkBlue"/>
+                <TextBlock Text="上三角" Canvas.Left="55" Canvas.Top="30"/>
+            </Canvas>
+
+            <Canvas Width="160" Height="80" Background="White" Tag="DownTriangle" MouseMove="BlockTemplate_MouseMove" Margin="4">
+                <Polygon Points="0,0 140,0 70,70" Fill="LightCoral" Stroke="DarkRed"/>
+                <TextBlock Text="下三角" Canvas.Left="55" Canvas.Top="30"/>
+            </Canvas>
+
+            <TextBlock Text="（コネクタは●で表示。クリック→別の●で接続）" TextWrapping="Wrap" Margin="6" FontSize="12"/>
+        </StackPanel>
+
+       
+
+		<!-- 中央：ボタン＋スクロールエリア -->
+		<Grid Grid.Row="1" Grid.Column="1" Margin="6">
+			<!-- 上部にボタンを配置 -->
+			<Button Content="画像として保存"
+					Click="ExportCanvasAsImage_Click"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Margin="5"
+					Width="150" Height="30"/>
+
+			<!-- ボタンの下にスクロールエリア -->
+			<ScrollViewer x:Name="MainScrollViewer"
+						  Margin="0,40,0,0"
+						  HorizontalScrollBarVisibility="Auto"
+						  VerticalScrollBarVisibility="Auto">
+				<Canvas x:Name="FlowCanvas"
+						Width="3000"
+						Height="2000"
+						Background="#FAFAFA"
+						AllowDrop="True"
+						Drop="FlowCanvas_Drop"/>
+			</ScrollViewer>
+		</Grid>
+
+
+		<!-- 右：ノート部分 -->
+        <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Background="#F8F8F8">
+            <TextBlock Text="選択中ブロック情報" FontWeight="Bold" Margin="4"/>
+            <StackPanel Orientation="Horizontal" Margin="4">
+                <Canvas x:Name="StatusColorCanvas" Width="36" Height="36" Background="LightGray" Margin="0,0,8,0"/>
+                <TextBox x:Name="MemoSummaryBox" Width="220" Height="32" AcceptsReturn ="True"  Text="(概要)" Foreground="Gray"
+                         GotFocus="MemoSummaryBox_GotFocus" LostFocus="MemoSummaryBox_LostFocus"/>
+            </StackPanel>
+
+            <TextBox x:Name="MemoContentBox" Height="230" Margin="4" AcceptsReturn="True" Text="(メモ内容)" TextWrapping="Wrap" Foreground="Gray"
+                     GotFocus="MemoContentBox_GotFocus" LostFocus="MemoContentBox_LostFocus"/>
+
+            <StackPanel Orientation="Horizontal" Margin="4">
+                <ComboBox x:Name="StatusBox" Width="140" SelectionChanged="StatusBox_SelectionChanged">
+                    <ComboBoxItem Content="未着手"/>
+                    <ComboBoxItem Content="進行中"/>
+                    <ComboBoxItem Content="中断"/>
+                    <ComboBoxItem Content="完了"/>
+                </ComboBox>
+                <Button Content="変更を反映" Margin="8,0,0,0" Click="ApplyChanges_Click"/>
+            </StackPanel>
+
+            <TextBlock Text="添付ファイル" FontWeight="Bold" Margin="6,8,6,2"/>
+            <ListBox x:Name="FileListBox" Height="140" Margin="6"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="6">
+                <Button Content="追加" Click="AddFile_Click" Margin="0,0,6,0"/>
+                <Button Content="開く" Click="OpenFile_Click" Margin="0,0,6,0"/>
+                <Button Content="ファイル削除" Click="OpenDeleteFilesWindow_Click"/>
+            </StackPanel>
+
+            <TextBlock x:Name="AuthorDisplay" Text="管理者: -" Margin="6,12,6,0" FontStyle="Italic"/>
+        </StackPanel>
+
+        <!-- 下部：プロジェクト追加 -->
+        <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="6" Background="#EAEAEA">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <!-- 企画名ラベル -->
+                <ColumnDefinition Width="200"/>
+                <!-- 企画名テキスト -->
+                <ColumnDefinition Width="Auto"/>
+                <!-- 開始日ラベル -->
+                <ColumnDefinition Width="180"/>
+                <!-- 日付 -->
+                <ColumnDefinition Width="Auto"/>
+                <!-- 管理者名 -->
+                <ColumnDefinition Width="120"/>
+                <!-- 追加ボタン -->
+                <ColumnDefinition Width="*"/>
+                <!-- 余白で伸縮調整 -->
+            </Grid.ColumnDefinitions>
+
+            <!-- 企画名 -->
+            <TextBlock Text="企画名" VerticalAlignment="Center" Margin="6"/>
+            <TextBox x:Name="ProjectNameBox" Grid.Column="1" Margin="6" Height="28"/>
+
+            <!-- 開始日 -->
+            <TextBlock Text="開始日" Grid.Column="2" VerticalAlignment="Center" Margin="6"/>
+            <DatePicker x:Name="StartDatePicker" Grid.Column="3" Margin="6" Height="28"/>
+
+            <!-- 管理者名と追加ボタン -->
+            <TextBox x:Name="AuthorBox" Grid.Column="4" Margin="6" Height="28" Width="120" Text="管理者名"/>
+            <Button Content="追加" Grid.Column="5" Width="80" Height="28" Margin="6" Click="AddProject_Click"/>
+        </Grid>
+    </Grid>
+</Window>

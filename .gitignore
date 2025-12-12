@@ -1,0 +1,52 @@
+# Build results
+bin/
+obj/
+out/
+build/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet packages
+*.nupkg
+*.snupkg
+*.nuspec
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+
+# Logs
+*.log
+
+# Cache
+*.cache
+*.dbmdl
+*.db
+*.jfm
+
+# Auto-generated files
+Generated\ Files/
+
+# Publish folders
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Others
+*.tmp
+*.bak
+*.swp
