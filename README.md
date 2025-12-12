@@ -21,6 +21,8 @@ FlowChartApp は、思考整理や仕様作成前のラフ設計に特化した
 
 このアプリはソースコード公開済みで、安全に動作します。
 
+ソースコードはBranchのMasterでご確認ください。
+
 <img width="560" height="480" alt="スクリーンショット 2025-12-12 111707" src="https://github.com/user-attachments/assets/3f9b2a64-b946-470d-b53d-a737c8d59b34" />
 
 ## 2. 特徴（Feature）
