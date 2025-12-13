@@ -9,7 +9,8 @@ FlowChartApp は、思考整理や仕様作成前のラフ設計に特化した
 
 <img width="560" height="480" alt="スクリーンショット 2025-12-12 111651" src="https://github.com/user-attachments/assets/10f5c012-2204-4e77-b53d-11c6bde64971" />
 
-アプリのダウンロードにWindows Defender SmartScreenによってブロックされることがあります。
+
+## ※アプリのダウンロードにWindows Defender SmartScreenによってブロックされることがあります。
 
 以下の手順で実行できます。
 
